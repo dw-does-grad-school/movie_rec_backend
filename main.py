@@ -57,7 +57,8 @@ def recommend_movies(genre: str = None, year: int = None):
         return []
 
     results = filtered.sort_values(by=['vote_average', 'popularity'], ascending=False)
-    return results.head(5).to_dict(orient='records')
+
+    return results.head(5).replace({pd.NA: None, float('nan'): None, pd.NaT: None}).to_dict(orient='records')
 
 
 @app.get("/search")
