@@ -42,15 +42,23 @@ def get_genres():
     genres.sort()
     return genres
 
+
 @app.get("/recommend")
 def recommend_movies(genre: str = None, year: int = None):
     filtered = df.copy()
+
     if year:
         filtered = filtered[filtered['release_year'] == year]
+
     if genre:
-        filtered = filtered[filtered['genre_list'].apply(lambda x: genre in x)]
+        filtered = filtered[filtered['genre_list'].apply(lambda genres: isinstance(genres, list) and genre in genres)]
+
+    if filtered.empty:
+        return []
+
     results = filtered.sort_values(by=['vote_average', 'popularity'], ascending=False)
     return results.head(5).to_dict(orient='records')
+
 
 @app.get("/search")
 def search_movies(query: str):
