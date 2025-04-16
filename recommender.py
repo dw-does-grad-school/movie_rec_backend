@@ -14,7 +14,7 @@ def parse_genres(genres_str):
         genres_data = json.loads(genres_str.replace("'", '"'))
         return [genre['name'] for genre in genres_data]
     except Exception:
-        return []
+        return [] 
 
 def recommend_movies(df, genre=None, year=None):
     recommendations = df.copy()
